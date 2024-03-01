@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/boards")
+@RequestMapping("/boards")
 public class UserController {
 
     private final Map<Long, UserEntity> userList = new HashMap<>();
