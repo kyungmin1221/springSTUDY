@@ -15,12 +15,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/boards")
 public class UserController {
 
     private final Map<Long, UserEntity> userList = new HashMap<>();
     //게시글 생성
-    @PostMapping("/board")
+    @PostMapping
     public UserResponseDto createBoard(@RequestBody UserRequestDto userRequestDto) {
         UserEntity user = new UserEntity(userRequestDto);
         Long maxId = userList.size() > 0 ? Collections.max(userList.keySet()) + 1 : 1;
@@ -35,7 +35,7 @@ public class UserController {
     }
 
     // 게시글 전체 조회
-    @GetMapping("/board")
+    @GetMapping
     public List<UserResponseDto> getBoard() {
         List<UserResponseDto> responseList = userList.values().stream()
                 .map(UserResponseDto::new).toList();
@@ -44,7 +44,7 @@ public class UserController {
     }
 
     // 선택한 게시물 조회
-    @GetMapping("/board/{boardId}")
+    @GetMapping("/{boardId}")
     public UserResponseDto getBoardById(@PathVariable Long boardId) {
         UserEntity user = userList.get(boardId);
         if (user == null) {
@@ -54,7 +54,7 @@ public class UserController {
     }
 
     // 게시물 수정
-    @PutMapping("/board/{boardId}")
+    @PutMapping("/{boardId}")
     public ResponseEntity<?> patchBoard(@PathVariable Long boardId, @RequestBody UserRequestDto userRequestDto) {
         UserEntity userEntity = userList.get(boardId);
         if (userEntity == null) {
@@ -75,7 +75,7 @@ public class UserController {
     }
 
     // 게시물 삭제
-    @DeleteMapping("/board/{boardId}")
+    @DeleteMapping("/{boardId}")
     public ResponseEntity<?> deleteMemo(@PathVariable Long boardId, @RequestParam String password) {
         UserEntity userEntity = userList.get(boardId);
         if (userEntity == null) {
@@ -90,12 +90,3 @@ public class UserController {
         return ResponseEntity.ok().body(boardId + " 게시글이 삭제되었습니다.");
     }
 }
-
-//{
-//        "id": 1,
-//        "title": "hanghae",
-//        "name": "kyungmin",
-//        "contents": "spring",
-//        "password" : "12341234",
-//        "orderDate": "2023-02-18T15:30:00"
-//        }
