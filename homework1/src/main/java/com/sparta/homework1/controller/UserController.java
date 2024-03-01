@@ -9,10 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/boards")
@@ -34,13 +32,13 @@ public class UserController {
         return userResponseDto;
     }
 
-    // 게시글 전체 조회
+    // 게시글 전체 조회 (작성일 기준 내림차순 정렬)
     @GetMapping
     public List<UserResponseDto> getBoard() {
-        List<UserResponseDto> responseList = userList.values().stream()
-                .map(UserResponseDto::new).toList();
-
-        return responseList;
+        return userList.values().stream()
+                .sorted(Comparator.comparing(UserEntity::getOrderDate).reversed())
+                .map(UserResponseDto::new) // entity -> dto
+                .collect(Collectors.toList());  // list 저장
     }
 
     // 선택한 게시물 조회
