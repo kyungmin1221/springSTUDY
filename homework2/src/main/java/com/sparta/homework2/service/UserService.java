@@ -18,6 +18,18 @@ public class UserService {
 
     @Transactional
     public UserEntity createUser(UserDto.UserRequestDto userRequestDto) {
+        UserEntity user = convertToEntity(userRequestDto);
+        return userRepository.save(user);
+
+    }
+
+    public List<UserDto.UserResponseDto> getUser() {
+        return userRepository.findAll().stream().map(UserDto.UserResponseDto::new).toList();
+    }
+
+
+    // dto -> entity
+    private UserEntity convertToEntity(UserDto.UserRequestDto userRequestDto) {
         UserEntity user = new UserEntity();
         user.setUsername(userRequestDto.getUsername());
         user.setGender(userRequestDto.getGender());
@@ -25,11 +37,7 @@ public class UserService {
         user.setPhoneNumber(userRequestDto.getPhoneNumber());
         user.setAddress(userRequestDto.getAddress());
 
-        return userRepository.save(user);
-    }
-
-    public List<UserDto.UserResponseDto> getUser() {
-        return userRepository.findAll().stream().map(UserDto.UserResponseDto::new).toList();
+        return user;
     }
 
 
