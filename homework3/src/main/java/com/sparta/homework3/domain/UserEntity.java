@@ -5,11 +5,9 @@ import com.sparta.homework3.constant.Role;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.context.annotation.Configuration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,11 +18,12 @@ import java.util.List;
 public class UserEntity {   // 관리자
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "USER_ID")
     private Long id;
 
     @Email
     @NotBlank
-    @Column(name = "USER_ID",unique = true)
+    @Column(unique = true)
     private String email;
 
     // @Size(min = 8, max = 15)
@@ -38,7 +37,7 @@ public class UserEntity {   // 관리자
     private Role role;
 
     @OneToMany(mappedBy = "user")
-    private List<InstructorEntity> instructors = new ArrayList<>();
+    private List<TeacherEntity> teachers = new ArrayList<>();
 
     public UserEntity(String email, String password, Department department, Role role) {
         this.email = email;

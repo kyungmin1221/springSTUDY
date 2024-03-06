@@ -1,14 +1,15 @@
 package com.sparta.homework3.dto;
 
+import com.sparta.homework3.domain.TeacherEntity;
 import lombok.*;
 
-public class InstructorDto {
+public class TeacherDto {
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class InstructorRequestDto {
+    public static class TeacherRequestDto {
 
         private String name;
 
@@ -27,7 +28,7 @@ public class InstructorDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class InstructorResponseDto {
+    public static class TeacherResponseDto {
 
         private Long id;
 
@@ -35,5 +36,10 @@ public class InstructorDto {
 
         private String name;
 
+        public TeacherResponseDto(TeacherEntity teacher) {
+            this.id = teacher.getId();
+            this.company = teacher.getCompany();
+            this.name = teacher.getName();
+        }
     }
 }

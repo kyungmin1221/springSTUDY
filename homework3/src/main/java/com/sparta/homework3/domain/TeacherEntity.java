@@ -4,15 +4,11 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.catalina.User;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter @Setter
 @Entity
 @NoArgsConstructor
-public class InstructorEntity {
+public class TeacherEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
