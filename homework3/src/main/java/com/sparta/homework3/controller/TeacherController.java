@@ -1,9 +1,12 @@
 package com.sparta.homework3.controller;
 
 
+import com.sparta.homework3.domain.CourseEntity;
 import com.sparta.homework3.domain.TeacherEntity;
 import com.sparta.homework3.domain.UserEntity;
+import com.sparta.homework3.dto.CourseDto;
 import com.sparta.homework3.dto.TeacherDto;
+import com.sparta.homework3.service.CourseService;
 import com.sparta.homework3.service.TeacherService;
 import com.sparta.homework3.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -13,13 +16,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RestController
-@RequestMapping("/api/instructor/register")
+@RequestMapping("/teacher")
 @RequiredArgsConstructor
 public class TeacherController {
 
     private final TeacherService teacherService;
     private final UserService userService;
+    private final CourseService courseService;
 
 
     // 강사 등록
@@ -43,6 +50,23 @@ public class TeacherController {
     @GetMapping("/{teacherId}")
     public ResponseEntity<TeacherDto.TeacherResponseDto> getTeacher(@PathVariable Long teacherId) {
         return ResponseEntity.ok().body(teacherService.getTeacher(teacherId));
-
     }
+
+    // 강사 수정
+    @PatchMapping("/{teacherId}")
+    public ResponseEntity<TeacherDto.TeacherResponseDto> updateTeacher(@PathVariable Long teacherId, @RequestBody TeacherDto.TeacherPatchDto patchDto) {
+        return ResponseEntity.ok().body(teacherService.updateTeacher(teacherId, patchDto));
+    }
+
+    // 강사가 진행하는 모든 강의 목록 조회
+    @GetMapping("/{teacherId}/courses")
+    @PreAuthorize("hasRole('MANAGER')")
+    public ResponseEntity<List<CourseDto.CourseResponseDto>> getAllCourseByTeacher(@PathVariable Long teacherId) {
+        List<CourseDto.CourseResponseDto> courses = courseService.getAllCourseByTeacher(teacherId);
+        return ResponseEntity.ok(courses);
+
+
+     }
 }
+
+

@@ -5,6 +5,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Getter @Setter
 @Entity
 @NoArgsConstructor
@@ -12,7 +15,7 @@ public class TeacherEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "INSTRUCTOR_ID")
+    @Column(name = "TEACHER_ID")
     private Long id;
 
     private String name;
@@ -28,5 +31,8 @@ public class TeacherEntity {
     @ManyToOne
     @JoinColumn(name = "USER_ID")
     private UserEntity user;
+
+    @OneToMany(mappedBy = "teachers")
+    private List<CourseEntity> coureses = new ArrayList<>();
 
 }

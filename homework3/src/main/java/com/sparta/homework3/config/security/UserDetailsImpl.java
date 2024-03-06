@@ -14,6 +14,7 @@ import java.util.Collection;
 // 검증된 사용자 조회
 public class UserDetailsImpl implements UserDetails {
 
+
     private final UserEntity user;
 
     public UserDetailsImpl(UserEntity user) {

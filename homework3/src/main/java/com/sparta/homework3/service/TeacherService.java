@@ -1,14 +1,19 @@
 package com.sparta.homework3.service;
 
+import com.sparta.homework3.domain.CourseEntity;
 import com.sparta.homework3.domain.TeacherEntity;
 import com.sparta.homework3.domain.UserEntity;
 import com.sparta.homework3.dto.TeacherDto;
+import com.sparta.homework3.repository.CourseRepository;
 import com.sparta.homework3.repository.TeacherRepository;
 import com.sparta.homework3.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +22,7 @@ public class TeacherService {
 
     private final TeacherRepository teacherRepository;
     private final UserRepository userRepository;
+    private final CourseRepository courseRepository;
 
     // 강사 등록
     @Transactional
@@ -40,6 +46,19 @@ public class TeacherService {
 
 
     // 강사 수정
+    @Transactional
+    public TeacherDto.TeacherResponseDto updateTeacher(Long teacherId, TeacherDto.TeacherPatchDto patchDto) {
+        TeacherEntity teacher = teacherRepository.findById(teacherId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 강사의 정보를 찾을 수 없습니다"));
+
+        teacher.setCareer(patchDto.getCareer());
+        teacher.setCompany(patchDto.getCompany());
+        teacher.setTel(patchDto.getTel());
+        teacher.setIntrodution(patchDto.getIntrodution());
+
+        return convertToDto(teacherRepository.save(teacher));
+    }
+
 
 
 
@@ -52,6 +71,7 @@ public class TeacherService {
         teacher.setTel(requestDto.getTel());
         teacher.setIntrodution(requestDto.getIntrodution());
 
+
         return teacher;
     }
 
@@ -61,6 +81,15 @@ public class TeacherService {
         responseDto.setName(teacher.getName());
         responseDto.setCompany(teacher.getCompany());
 
+        if (teacher.getUser() != null) {
+            responseDto.setRole(teacher.getUser().getRole().toString()); // 관리자의 Role 정보를 설정
+        }
+
         return responseDto;
+    }
+
+    public TeacherEntity findByName(String name) {
+        return teacherRepository.findByName(name)
+                .orElseThrow(() -> new UsernameNotFoundException("해당 이름을 가진 강사를 찾을 수 없습니다 : " + name));
     }
 }
