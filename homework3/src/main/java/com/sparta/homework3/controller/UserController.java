@@ -7,6 +7,7 @@ import com.sparta.homework3.dto.UserRegisterRequestDto;
 import com.sparta.homework3.dto.UserRegisterResponseDto;
 import com.sparta.homework3.service.UserService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -22,7 +23,7 @@ public class UserController {
 
     // 회원가입
     @PostMapping("/register")
-    public ResponseEntity<UserRegisterResponseDto> registerUser(@RequestBody UserRegisterRequestDto requestDto) {
+    public ResponseEntity<UserRegisterResponseDto> registerUser(@RequestBody @Valid UserRegisterRequestDto requestDto) {
         UserRegisterResponseDto responseDto = userService.registerUser(requestDto);
 
         return ResponseEntity.ok(responseDto);

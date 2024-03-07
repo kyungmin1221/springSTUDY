@@ -26,7 +26,6 @@ public class UserEntity {   // 관리자
     @Column(unique = true)
     private String email;
 
-    // @Size(min = 8, max = 15)
     @Column(nullable = false)
     private String password;
 

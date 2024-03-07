@@ -59,6 +59,12 @@ public class TeacherService {
         return convertToDto(teacherRepository.save(teacher));
     }
 
+    // 강사 삭제
+    @Transactional
+    public String deleteTeacher(Long teacherId) {
+        teacherRepository.deleteById(teacherId);
+        return "선택한 강사의 정보가 성공적으로 삭제 되었습니다.";
+    }
 
 
 
