@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class CourseDto {
 
     @Getter

@@ -4,6 +4,7 @@ package com.sparta.homework4.service;
 import com.sparta.homework4.constant.Category;
 import com.sparta.homework4.domain.CourseEntity;
 import com.sparta.homework4.domain.TeacherEntity;
+import com.sparta.homework4.dto.CommentDto;
 import com.sparta.homework4.dto.CourseDto;
 import com.sparta.homework4.exception.CustomException;
 import com.sparta.homework4.exception.ErrorCode;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

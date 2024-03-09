@@ -7,6 +7,7 @@ import lombok.*;
 
 public class CommentDto {
 
+
     @Getter
     @Setter
     @AllArgsConstructor
