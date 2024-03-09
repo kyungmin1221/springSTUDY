@@ -57,9 +57,9 @@ public class CommentService {
 
     // 선택한 강의 댓글 삭제
     @Transactional
-    public String deleteComment(Long commentId) {
+    public CommentDto.CommentResponseDto deleteComment(Long commentId) {
         commentRepository.deleteById(commentId);
-        return "선택한 댓글이 삭제 되었습니다.";
+        return new CommentDto.CommentResponseDto("댓글이 삭제 되었습니다.");
     }
 
 

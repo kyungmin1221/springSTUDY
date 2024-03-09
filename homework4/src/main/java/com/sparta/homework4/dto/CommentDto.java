@@ -33,9 +33,15 @@ public class CommentDto {
 
         private String content;
 
+        private String message;
+
         public CommentResponseDto(CommentEntity comment) {
             this.courseId = comment.getCourse().getId();
             this.content = comment.getContent();
+        }
+
+        public CommentResponseDto(String message) {
+            this.message = message;
         }
     }
 
