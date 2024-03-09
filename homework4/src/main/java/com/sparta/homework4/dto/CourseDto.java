@@ -16,9 +16,7 @@ public class CourseDto {
     @Builder
     public static class CourseResponseDto {
 
-        private Long id;
-
-        private String name;
+        private String courseName;
 
         private int price;
 
@@ -28,13 +26,16 @@ public class CourseDto {
 
         private String teacherName;
 
+        private int likeCount;
+
+
         public CourseResponseDto(CourseEntity courseEntity) {
-            this.id = courseEntity.getId();
-            this.name = courseEntity.getName();
+            this.courseName = courseEntity.getName();
             this.price = courseEntity.getPrice();
             this.intro = courseEntity.getIntro();
             this.category = courseEntity.getCategory();
-            this.teacherName = courseEntity.getTeachers().getName();
+            this.teacherName = courseEntity.getTeacher().getName();
+            this.likeCount = courseEntity.getLikeCount();
         }
     }
 
@@ -57,8 +58,8 @@ public class CourseDto {
         @NotNull
         private Category category;
 
-        @NotNull
-        private Long teacherId; // 교사 ID 추가
+        private Long teacherId;
+
     }
 
     @Getter
@@ -66,7 +67,7 @@ public class CourseDto {
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class CoursePatchDto {
+    public static class CoursePatchDto {        // 강의 수정 dto
 
         @NotBlank
         private String name;
@@ -82,5 +83,28 @@ public class CourseDto {
 
     }
 
+    @Getter
+    @Setter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class CourseCategoryDto {
 
+        private String courseName;
+
+        private int price;
+
+        private String intro;
+
+        private Category category;
+
+        public CourseCategoryDto(CourseEntity courseEntity) {
+            this.courseName = courseEntity.getName();
+            this.price = courseEntity.getPrice();
+            this.intro = courseEntity.getIntro();
+            this.category = courseEntity.getCategory();
+        }
+
+    }
 }
+

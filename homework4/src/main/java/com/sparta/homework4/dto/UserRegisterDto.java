@@ -1,6 +1,5 @@
 package com.sparta.homework4.dto;
 
-import com.sparta.homework4.constant.Department;
 import com.sparta.homework4.constant.Role;
 import com.sparta.homework4.domain.UserEntity;
 import jakarta.validation.constraints.Email;
@@ -26,7 +25,7 @@ public class UserRegisterDto {
         private String password;
 
         @NotNull
-        private Department department;
+        private Role role;
     }
 
 
@@ -37,12 +36,10 @@ public class UserRegisterDto {
     @Builder
     public static class UserRegisterResponseDto {
         private String email;
-        private Department department;
         private Role role;
 
         public UserRegisterResponseDto(UserEntity user) {
             this.email = user.getEmail();
-            this.department = user.getDepartment();
             this.role = user.getRole();
         }
     }

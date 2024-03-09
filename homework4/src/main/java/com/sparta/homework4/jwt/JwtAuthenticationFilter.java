@@ -3,10 +3,8 @@ package com.sparta.homework4.jwt;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.sparta.homework4.config.security.UserDetailsImpl;
-import com.sparta.homework4.constant.Department;
 import com.sparta.homework4.constant.Role;
 import com.sparta.homework4.dto.UserLoginDto;
-import com.sparta.homework4.dto.UserRegisterDto;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

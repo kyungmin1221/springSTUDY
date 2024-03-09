@@ -23,12 +23,17 @@ public class CourseController {
 
     // (관리자만) 강의 등록
     @PostMapping
-    @Secured(Role.Authority.MANAGER)
+    @Secured(Role.Authority.ADMIN)
     public ResponseEntity<CourseDto.CourseResponseDto> createCourse(@RequestBody @Valid CourseDto.CourseRequestDto requestDto) {
-
-        CourseEntity course = courseService.createCourse(requestDto);
-        CourseDto.CourseResponseDto responseDto = new CourseDto.CourseResponseDto(course);
+        CourseDto.CourseResponseDto responseDto = courseService.createCourse(requestDto);
         return ResponseEntity.ok(responseDto);
+    }
+
+    // 강의 수정
+    @PatchMapping("/{courseId}")
+    @Secured(Role.Authority.ADMIN)
+    public ResponseEntity<CourseDto.CourseResponseDto> updateCourse(@PathVariable Long courseId, @RequestBody @Valid CourseDto.CoursePatchDto requestDto) {
+        return ResponseEntity.ok().body(courseService.updateCourse(courseId, requestDto));
     }
 
     // 세부 강의 조회
@@ -37,21 +42,17 @@ public class CourseController {
         return ResponseEntity.ok().body(courseService.getCourse(courseId));
     }
 
-    // 강의 수정
-    @PatchMapping("/{courseId}")
-    public ResponseEntity<CourseDto.CourseResponseDto> updateCourse(@PathVariable Long courseId, @RequestBody @Valid CourseDto.CoursePatchDto requestDto) {
-        return ResponseEntity.ok().body(courseService.updateCourse(courseId, requestDto));
-    }
+
 
     // 선택한 카테고리에 포함된 강의를 조회
     @GetMapping("/category/{category}")
-    @Secured(Role.Authority.MANAGER)
-    public ResponseEntity<List<CourseDto.CourseResponseDto>> getCoursesByCategory(@PathVariable Category category) {
+    public ResponseEntity<List<CourseDto.CourseCategoryDto>> getCoursesByCategory(@PathVariable Category category) {
         return ResponseEntity.ok(courseService.findCoursesByCategory(category));
     }
 
     // 강의 삭제
     @DeleteMapping("/{courseId}")
+    @Secured(Role.Authority.ADMIN)
     public ResponseEntity<String> deleteCourse(@PathVariable Long courseId) {
         return ResponseEntity.ok().body(courseService.deleteCourse(courseId));
     }

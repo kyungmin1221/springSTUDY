@@ -1,6 +1,7 @@
 package com.sparta.homework4.domain;
 
 
+import com.sparta.homework4.dto.CommentDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,18 +16,16 @@ import java.util.List;
 @NoArgsConstructor
 public class CommentEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "comment_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity users;
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
-    private CourseEntity courses;
+    private CourseEntity course;
 
-
+    private String content;
 }

@@ -1,10 +1,9 @@
 package com.sparta.homework4.constant;
 
 public enum Role {
-//    MANAGER,STAFF;
 
-    MANAGER(Authority.MANAGER),
-    STAFF(Authority.STAFF);
+    ADMIN(Authority.ADMIN),
+    USER(Authority.USER);
 
     private final String authority;
 
@@ -17,7 +16,7 @@ public enum Role {
     }
 
     public static class Authority {
-        public static final String MANAGER = "ROLE_MANAGER";
-        public static final String STAFF = "ROLE_STAFF";
+        public static final String ADMIN = "ROLE_ADMIN";
+        public static final String USER = "ROLE_USER";
     }
 }

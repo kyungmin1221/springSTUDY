@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
-    List<CourseEntity> findByTeachersIdOrderByLocalDateTimeDesc(Long teacherId);
+    List<CourseEntity> findByTeacherIdOrderByLocalDateTimeDesc(Long teacherId);
 
     List<CourseEntity> findByCategoryOrderByLocalDateTimeDesc(Category category);
 }

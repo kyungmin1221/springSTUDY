@@ -13,18 +13,15 @@ import org.apache.catalina.User;
 @NoArgsConstructor
 public class LikeEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "like_id")
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
-    private UserEntity users;
+    private UserEntity user;
 
     @ManyToOne
     @JoinColumn(name = "course_id")
-    private CourseEntity courses;
-
+    private CourseEntity course;
 
 }

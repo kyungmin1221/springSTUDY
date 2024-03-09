@@ -2,7 +2,9 @@ package com.sparta.homework4.domain;
 
 
 import com.sparta.homework4.constant.Category;
+import com.sparta.homework4.dto.CourseDto;
 import jakarta.persistence.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,7 +22,7 @@ public class CourseEntity {
     @Column(name = "course_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -35,15 +37,27 @@ public class CourseEntity {
 
     @ManyToOne
     @JoinColumn(name = "teacher_id")
-    private TeacherEntity teachers;
-
-   @OneToMany(mappedBy = "courses")
-   private List<LikeEntity> likes = new ArrayList<>();
-
-   @OneToMany(mappedBy = "courses")
-   private List<CommentEntity> comments = new ArrayList<>();
-
-
+    private TeacherEntity teacher;
 
     private LocalDateTime localDateTime;
+
+    @Column(nullable = false)
+    private int likeCount;
+
+    @OneToMany(mappedBy = "course")
+    private List<CommentEntity> comments = new ArrayList<>();
+
+
+
+    // 증가여부 확인 -> +1 ?
+//    public void setLikeCount(int likeCount) {
+//        this.likeCount = likeCount;
+//    }
+
+    public CourseEntity(CourseDto.CourseRequestDto requestDto) {
+        this.name = requestDto.getName();
+        this.price = requestDto.getPrice();
+        this.intro = requestDto.getIntro();
+        this.category = requestDto.getCategory();
+    }
 }

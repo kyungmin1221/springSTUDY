@@ -37,20 +37,17 @@ public class TeacherDto {
     @Builder
     public static class TeacherResponseDto {
 
+        private String teacherName;
+
         private Long id;
 
         private String company;
 
-        private String name;
-
-        private String role;
 
         public TeacherResponseDto(TeacherEntity teacher) {
             this.id = teacher.getId();
             this.company = teacher.getCompany();
-            this.name = teacher.getName();
-            this.role = teacher.getUser() != null ? teacher.getUser().getRole().name() : null; // 관리자의 role을 가져옴
-
+            this.teacherName = teacher.getName();
         }
     }
 
