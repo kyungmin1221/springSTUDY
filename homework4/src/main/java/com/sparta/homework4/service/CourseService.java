@@ -74,12 +74,6 @@ public class CourseService {
 
     }
 
-    // 선택한 강사가 촬영한 강의 목록 조회 기능
-    public List<CourseDto.CourseResponseDto> getAllCourseByTeacher(Long teacherId) {
-        return courseRepository.findByTeacherIdOrderByLocalDateTimeDesc(teacherId)
-                .stream().map(CourseDto.CourseResponseDto::new).toList();
-    }
-
 
     // 선택한 카테고리에 포함된 강의를 조회
     public List<CourseDto.CourseCategoryDto> findCoursesByCategory(Category category) {

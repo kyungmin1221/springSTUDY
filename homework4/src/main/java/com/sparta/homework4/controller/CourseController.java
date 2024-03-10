@@ -41,14 +41,6 @@ public class CourseController {
         return ResponseEntity.ok().body(courseService.getCourse(courseId));
     }
 
-
-
-    // 선택한 카테고리에 포함된 강의를 조회
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<CourseDto.CourseCategoryDto>> getCoursesByCategory(@PathVariable Category category) {
-        return ResponseEntity.ok(courseService.findCoursesByCategory(category));
-    }
-
     // 강의 삭제
     @DeleteMapping("/{courseId}")
     @Secured(Role.Authority.ADMIN)
@@ -56,5 +48,10 @@ public class CourseController {
         return ResponseEntity.ok().body(courseService.deleteCourse(courseId));
     }
 
+    // 선택한 카테고리에 포함된 강의를 조회
+    @GetMapping("/category/{category}")
+    public ResponseEntity<List<CourseDto.CourseCategoryDto>> getCoursesByCategory(@PathVariable Category category) {
+        return ResponseEntity.ok(courseService.findCoursesByCategory(category));
+    }
 
 }

@@ -1,6 +1,5 @@
 package com.sparta.homework4.controller;
 
-import com.sparta.homework4.domain.UserEntity;
 import com.sparta.homework4.dto.UserRegisterDto;
 import com.sparta.homework4.service.UserService;
 import jakarta.validation.Valid;

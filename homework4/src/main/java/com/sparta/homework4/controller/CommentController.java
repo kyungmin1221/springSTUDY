@@ -27,8 +27,8 @@ public class CommentController {
     }
 
     // 선택한 강의 댓글 수정
-    @PatchMapping("/{userId}/{commentId}")
-    public ResponseEntity<CommentDto.CommentResponseDto> updateComment(@PathVariable Long userId, @PathVariable Long commentId, @RequestBody @Valid CommentDto.CommentPatchDto patchDto) {
+    @PatchMapping("/{commentId/user/{userId}")
+    public ResponseEntity<CommentDto.CommentResponseDto> updateComment(@PathVariable Long commentId, @PathVariable Long userId, @RequestBody @Valid CommentDto.CommentPatchDto patchDto) {
         CommentDto.CommentResponseDto responseDto = commentService.updateComment(userId, commentId, patchDto);
         return ResponseEntity.ok(responseDto);
     }

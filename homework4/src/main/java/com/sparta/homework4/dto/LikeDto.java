@@ -27,9 +27,9 @@ public class LikeDto {
     @Builder
     public static class LikeResponseDto {
 
-        private Long userId;
+        private boolean isLiked;
 
-        private Long courseId;
+        private String likeMessage;
 
     }
 }
