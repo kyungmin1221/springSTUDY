@@ -22,7 +22,6 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final CourseService courseService;
-    private final UserRepository userRepository;
     private final UserService userService;
 
     // 선택한 강의 댓글 등록
@@ -61,7 +60,6 @@ public class CommentService {
         commentRepository.deleteById(commentId);
         return new CommentDto.CommentResponseDto("댓글이 삭제 되었습니다.");
     }
-
 
 
     public CommentEntity findCommentById(Long commentId) {

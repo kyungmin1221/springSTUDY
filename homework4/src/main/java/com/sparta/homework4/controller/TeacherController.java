@@ -27,8 +27,6 @@ import java.util.List;
 public class TeacherController {
 
     private final TeacherService teacherService;
-    private final UserService userService;
-    private final CourseService courseService;
 
 
     // 강사 등록
@@ -49,7 +47,7 @@ public class TeacherController {
     // 강사 수정
     @PatchMapping("/{teacherId}")
     @Secured(Role.Authority.ADMIN)
-    public ResponseEntity<TeacherDto.TeacherResponseDto> updateTeacher(@PathVariable Long teacherId, @RequestBody TeacherDto.TeacherPatchDto patchDto) {
+    public ResponseEntity<TeacherDto.TeacherResponseDto> updateTeacher(@PathVariable Long teacherId, @RequestBody @Valid TeacherDto.TeacherPatchDto patchDto) {
         return ResponseEntity.ok().body(teacherService.updateTeacher(teacherId, patchDto));
     }
 

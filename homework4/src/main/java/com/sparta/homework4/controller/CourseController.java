@@ -2,7 +2,6 @@ package com.sparta.homework4.controller;
 
 import com.sparta.homework4.constant.Category;
 import com.sparta.homework4.constant.Role;
-import com.sparta.homework4.domain.CourseEntity;
 import com.sparta.homework4.dto.CourseDto;
 import com.sparta.homework4.service.CourseService;
 import jakarta.validation.Valid;
@@ -53,7 +52,7 @@ public class CourseController {
     // 강의 삭제
     @DeleteMapping("/{courseId}")
     @Secured(Role.Authority.ADMIN)
-    public ResponseEntity<String> deleteCourse(@PathVariable Long courseId) {
+    public ResponseEntity<String> deleteCourse(@PathVariable @Valid Long courseId) {
         return ResponseEntity.ok().body(courseService.deleteCourse(courseId));
     }
 

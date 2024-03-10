@@ -27,8 +27,8 @@ public class UserService {
         String password = passwordEncoder.encode(requestDto.getPassword());
         Role role = requestDto.getRole();
         // 회원 중복 확인
-        Optional<UserEntity> checkUseremail = userRepository.findByEmail(email);
-        if (checkUseremail.isPresent()) {
+        Optional<UserEntity> checkUserEmail = userRepository.findByEmail(email);
+        if (checkUserEmail.isPresent()) {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
 
@@ -37,6 +37,13 @@ public class UserService {
 
         return new UserRegisterDto.UserRegisterResponseDto(user);
 
+    }
+
+    // 회원탈퇴
+    public String deleteUser(Long userId) {
+        UserEntity user = findUserById(userId);
+        userRepository.delete(user);
+        return "회원이 탈퇴되었습니다.";
     }
 
 

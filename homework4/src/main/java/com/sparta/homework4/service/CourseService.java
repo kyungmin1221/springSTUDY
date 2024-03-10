@@ -60,7 +60,7 @@ public class CourseService {
 
     }
 
-    // 세부 강의 조회
+    // 세부 강의 조회(댓글 포함)
     public CourseDto.CourseResponseDto getCourse(Long courseId) {
         CourseEntity course = findCourseById(courseId);
         return convertToDto(course);
@@ -103,6 +103,14 @@ public class CourseService {
         responseDto.setCategory(course.getCategory());
         responseDto.setTeacherName(course.getTeacher().getName());
         responseDto.setLikeCount(course.getLikeCount());
+
+
+        // 댓글 목록을 CommentResponseDto 리스트로 변환하여 설정
+        List<CommentDto.CommentResponseDto> commentDtos = course.getComments().stream()
+                .map(comment -> new CommentDto.CommentResponseDto(comment.getCourse().getId(), comment.getContent(), "댓글 메시지"))
+                .collect(Collectors.toList());
+
+        responseDto.setComments(commentDtos);
 
         return responseDto;
     }

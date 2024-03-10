@@ -31,6 +31,8 @@ public class CourseDto {
 
         private int likeCount;
 
+        private List<CommentDto.CommentResponseDto> comments;
+
 
         public CourseResponseDto(CourseEntity courseEntity) {
             this.courseName = courseEntity.getName();
@@ -39,6 +41,9 @@ public class CourseDto {
             this.category = courseEntity.getCategory();
             this.teacherName = courseEntity.getTeacher().getName();
             this.likeCount = courseEntity.getLikeCount();
+        }
+        public void setComments(List<CommentDto.CommentResponseDto> comments) {
+            this.comments = comments;
         }
     }
 
@@ -61,6 +66,7 @@ public class CourseDto {
         @NotNull
         private Category category;
 
+        @NotNull
         private Long teacherId;
 
     }

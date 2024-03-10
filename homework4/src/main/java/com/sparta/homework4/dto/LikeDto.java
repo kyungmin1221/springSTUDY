@@ -14,6 +14,7 @@ public class LikeDto {
     @Builder
     public static class LikeRequestDto {
 
+        @NotNull
         private Long courseId;
 
     }

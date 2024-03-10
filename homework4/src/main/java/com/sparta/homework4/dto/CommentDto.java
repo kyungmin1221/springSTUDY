@@ -3,6 +3,7 @@ package com.sparta.homework4.dto;
 import com.sparta.homework4.domain.CommentEntity;
 import com.sparta.homework4.domain.CourseEntity;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 public class CommentDto {
@@ -16,7 +17,7 @@ public class CommentDto {
     public static class CommentRequestDto {
 
         // 댓글 내용
-        @NotBlank
+        @NotNull
         private String content;
 
     }

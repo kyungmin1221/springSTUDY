@@ -44,15 +44,12 @@ public class CourseEntity {
     @Column(nullable = false)
     private int likeCount;
 
-    @OneToMany(mappedBy = "course")
+    @OneToMany(mappedBy = "course",cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     private List<CommentEntity> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "course", cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    private List<LikeEntity> likes = new ArrayList<>();
 
-
-    // 증가여부 확인 -> +1 ?
-//    public void setLikeCount(int likeCount) {
-//        this.likeCount = likeCount;
-//    }
 
     public CourseEntity(CourseDto.CourseRequestDto requestDto) {
         this.name = requestDto.getName();
