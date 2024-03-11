@@ -29,7 +29,7 @@ public class UserEntity {   // 관리자
     @Column(nullable = false)
     private Role role;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
     private List<CommentEntity> comment = new ArrayList<>();
 
     public UserEntity(String email, String password, Role role) {
