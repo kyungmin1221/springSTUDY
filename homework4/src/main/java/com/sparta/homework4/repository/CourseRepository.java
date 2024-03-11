@@ -12,4 +12,7 @@ public interface CourseRepository extends JpaRepository<CourseEntity, Long> {
     List<CourseEntity> findByTeacherIdOrderByLocalDateTimeDesc(Long teacherId);
 
     List<CourseEntity> findByCategoryOrderByLocalDateTimeDesc(Category category);
+
+    List<CourseEntity> findAllByOrderByNameDesc();
+    List<CourseEntity> findAllByOrderByPriceDesc();
 }

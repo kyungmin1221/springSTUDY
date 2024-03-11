@@ -99,7 +99,7 @@ public class CourseDto {
     @Builder
     public static class CourseCategoryDto {
 
-        private String courseName;
+        private String name;
 
         private int price;
 
@@ -108,7 +108,7 @@ public class CourseDto {
         private Category category;
 
         public CourseCategoryDto(CourseEntity courseEntity) {
-            this.courseName = courseEntity.getName();
+            this.name = courseEntity.getName();
             this.price = courseEntity.getPrice();
             this.intro = courseEntity.getIntro();
             this.category = courseEntity.getCategory();

@@ -76,9 +76,12 @@ public class CourseService {
 
 
     // 선택한 카테고리에 포함된 강의를 조회
-    public List<CourseDto.CourseCategoryDto> findCoursesByCategory(Category category) {
-        return courseRepository.findByCategoryOrderByLocalDateTimeDesc(category)
-                .stream().map(CourseDto.CourseCategoryDto::new).toList();
+    public List<CourseDto.CourseCategoryDto> findCoursesByCategory(Category category,String type) {
+        return switch (type) {
+            case "name" -> courseRepository.findAllByOrderByNameDesc().stream().map(CourseDto.CourseCategoryDto::new).toList();
+            case "price" -> courseRepository.findAllByOrderByPriceDesc().stream().map(CourseDto.CourseCategoryDto::new).toList();
+            default -> courseRepository.findByCategoryOrderByLocalDateTimeDesc(category).stream().map(CourseDto.CourseCategoryDto::new).toList();
+        };
     }
 
 

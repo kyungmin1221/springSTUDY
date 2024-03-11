@@ -49,9 +49,14 @@ public class CourseController {
     }
 
     // 선택한 카테고리에 포함된 강의를 조회
-    @GetMapping("/category/{category}")
-    public ResponseEntity<List<CourseDto.CourseCategoryDto>> getCoursesByCategory(@PathVariable Category category) {
-        return ResponseEntity.ok(courseService.findCoursesByCategory(category));
+    @GetMapping("/category")
+    public ResponseEntity<List<CourseDto.CourseCategoryDto>> getCoursesByCategory(@RequestParam Category category,
+                                                                                  @RequestParam(required = false, defaultValue = "localDateTime", value = "orderby") String type)  {
+        // required = false : 해당 쿼리 param은 요청시 보내지 않아도 상관없음
+        // defaultValue = "~~" : 보내지 않는다면 디폴트 값은 "~~" 이다.
+        // value : "orderby" : 쿼리 부분에서 키값은 "orderby" 이다.
+        List<CourseDto.CourseCategoryDto> categoryDtos = courseService.findCoursesByCategory(category, type);
+        return ResponseEntity.ok(categoryDtos);
     }
 
 }
