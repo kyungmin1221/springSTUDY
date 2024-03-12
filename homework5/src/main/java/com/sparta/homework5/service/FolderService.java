@@ -135,9 +135,11 @@ public class FolderService {
     }
 
     // 장바구니 삭제(회원만)
-    
-
-
+    @Transactional
+    public String deleteFolder(Long folderId) {
+        folderRepository.deleteById(folderId);
+        return "해당 장바구니가 삭제되었습니다.";
+    }
 
 
     // 해당하는 장바구니가 있는지 유무 확인

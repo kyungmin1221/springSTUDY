@@ -50,4 +50,8 @@ public class FolderController {
     }
 
     // 장바구니 삭제
+    @DeleteMapping("/{folderId}")
+    public ResponseEntity<String> deleteFolder(@PathVariable Long folderId) {
+        return ResponseEntity.ok().body(folderService.deleteFolder(folderId));
+    }
 }
