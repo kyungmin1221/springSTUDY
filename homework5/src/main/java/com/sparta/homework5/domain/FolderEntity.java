@@ -26,9 +26,6 @@ public class FolderEntity {
     @Column(nullable = false)
     private String folderName;  // 장바구니의 이름
 
-//    @OneToMany(mappedBy = "folder")
-//    private List<ProductFolderEntity> productFolders = new ArrayList<>();
-
     @Builder
     public FolderEntity(String folderName,UserEntity user) {
         this.folderName = folderName;

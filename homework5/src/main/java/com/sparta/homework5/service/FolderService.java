@@ -6,6 +6,7 @@ import com.sparta.homework5.domain.ProductEntity;
 import com.sparta.homework5.domain.ProductFolderEntity;
 import com.sparta.homework5.domain.UserEntity;
 import com.sparta.homework5.dto.FolderDto;
+import com.sparta.homework5.dto.ProductDto;
 import com.sparta.homework5.dto.ProductFolderDto;
 import com.sparta.homework5.exception.CustomException;
 import com.sparta.homework5.exception.ErrorCode;
@@ -14,6 +15,7 @@ import com.sparta.homework5.repository.ProductFolderRepository;
 import com.sparta.homework5.repository.ProductRepository;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,11 +61,12 @@ public class FolderService {
 
     // 장바구니에 상품을 추가
     @Transactional
-    public ProductFolderDto.ProductFolderResponseDto addProductInFolder(Long folderId, ProductFolderDto.ProductFolderRequestDto requestDto, UserEntity user) {
+    public ProductFolderDto.ProductFolderResponseDto addProductInFolder(Long folderId, ProductFolderDto.ProductFolderItemDto requestDto, UserEntity user) {
 
         FolderEntity folder = findFolderId(folderId);
         ProductEntity product = productService.findProductId(requestDto.getProductId());
         int quantity = requestDto.getQuantity();
+        int price = requestDto.getPrice();
 
         // 사용자 권한 확인
         if (!product.getUser().getId().equals(user.getId()) || !folder.getUser().getId().equals(user.getId())) {
@@ -80,24 +84,58 @@ public class FolderService {
                 .product(product)
                 .folder(folder)
                 .quantity(quantity)
+                .price(price)
                 .build();
 
         productFolderRepository.save(productFolder);
 
         // 응답 DTO 생성 및 반환
-        return new ProductFolderDto.ProductFolderResponseDto(product.getId(), folder.getId(), quantity);
+        return new ProductFolderDto.ProductFolderResponseDto(product.getId(), quantity , price);
     }
 
     // 장바구니 조회(회원만) - 장바구니에 담긴 상품들의 총 결제 금액확인 가능
-//    public FolderDto.FolderResponseDto getFolder(Long folderId) {
-//        FolderEntity folder = findFolderId(folderId);
-//
-//    }
+    public ProductFolderDto.CartItemDto getFolder(Long folderId, UserEntity user) {
+        FolderEntity folder = findFolderId(folderId);
+        if(!folder.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("해당 장바구니에 접근 권한이 없습니다. 다시 로그인해주세요.");
+        }
+
+        // 장바구니에서 상품 다 추출
+        List<ProductFolderEntity> cartItems = productFolderRepository.findAllByFolderId(folderId);
+
+        List<ProductFolderDto.ProductFolderItemDto> itemDtos = cartItems.stream().map(item -> new ProductFolderDto.ProductFolderItemDto(
+                item.getProduct().getId(),      // prio
+                item.getProduct().getProductName(),
+                item.getQuantity(),
+                item.getProduct().getPrice()
+        )).collect(Collectors.toList());
+
+        int totalPrice = itemDtos.stream()
+                .mapToInt(item -> item.getPrice() * item.getQuantity())
+                .sum();
+
+        return new ProductFolderDto.CartItemDto(itemDtos, totalPrice);
+    }
 
 
     // 장바구니 수정(회원만) - 선택한 상품의 수량을 수정할 수 있음
+    @Transactional
+    public ProductFolderDto.ProductFolderResponseDto updateFolder(ProductFolderDto.ProductFolderItemPatchDto patchDto, UserEntity user) {
+        ProductFolderEntity productFolder = productFolderRepository.findById(patchDto.getProductFolderId())
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 장바구니 상품이 존재하지 않습니다."));
+
+        if(!productFolder.getFolder().getId().equals(patchDto.getProductFolderId())) {
+            throw new IllegalArgumentException("장바구니의 수정 권한이 없습니다. 다시 로그인해주세요.");
+        }
+
+        productFolder.setQuantity(patchDto.getQuantity());
+        productFolderRepository.save(productFolder);
+
+        return new ProductFolderDto.ProductFolderResponseDto(productFolder);
+    }
 
     // 장바구니 삭제(회원만)
+    
 
 
 

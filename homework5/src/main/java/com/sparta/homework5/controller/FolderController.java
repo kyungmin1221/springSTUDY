@@ -30,9 +30,24 @@ public class FolderController {
 
     // 장바구니에 상품 추가
     @PostMapping("/{folderId}")
-    public ResponseEntity<ProductFolderDto.ProductFolderResponseDto> addProductInFolder(@PathVariable Long folderId, @RequestBody ProductFolderDto.ProductFolderRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ProductFolderDto.ProductFolderResponseDto> addProductInFolder(@PathVariable Long folderId, @RequestBody ProductFolderDto.ProductFolderItemDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         ProductFolderDto.ProductFolderResponseDto responseDto = folderService.addProductInFolder(folderId, requestDto,userDetails.getUser());
         return ResponseEntity.ok(responseDto);
 
     }
+
+    // 장바구니 조회
+    @GetMapping("/{folderId}")
+    public ResponseEntity<ProductFolderDto.CartItemDto> getFolder(@PathVariable Long folderId,  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok().body(folderService.getFolder(folderId, userDetails.getUser()));
+    }
+
+    // 장바구니 수정
+    @PatchMapping
+    public ResponseEntity<ProductFolderDto.ProductFolderResponseDto> updateFolder(@RequestBody ProductFolderDto.ProductFolderItemPatchDto patchDto,
+                                                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok().body(folderService.updateFolder(patchDto,userDetails.getUser()));
+    }
+
+    // 장바구니 삭제
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
@@ -27,11 +28,19 @@ public class ProductFolderEntity {
     @Column(nullable = false)
     private int quantity;
 
+    @Column(nullable = false)
+    private int price;
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
     @Builder
-    public ProductFolderEntity(ProductEntity product, FolderEntity folder, int quantity) {
+    public ProductFolderEntity(ProductEntity product, FolderEntity folder, int quantity, int price) {
         this.product = product;
         this.folder = folder;
         this.quantity = quantity;
+        this.price = price;
     }
 
 }
