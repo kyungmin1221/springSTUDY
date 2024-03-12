@@ -2,12 +2,16 @@ package com.sparta.homework5.domain;
 
 import com.sparta.homework5.constant.Role;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 public class UserEntity {
 
@@ -33,6 +37,10 @@ public class UserEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @OneToMany(mappedBy = "user")
+    private List<UserBasketEntity> basketList = new ArrayList<>();
+
+    @Builder
     public UserEntity(String email, String password, String gender,String phoneNumber,String address, Role role) {
         this.email = email;
         this.password = password;

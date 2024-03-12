@@ -38,7 +38,16 @@ public class UserService {
             throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
         }
 
-        UserEntity user = new UserEntity(email,password,gender,phoneNumber,address,role);
+        // 빌더 패턴을 사용 UserEntity 객체 생성
+        UserEntity user = UserEntity.builder()
+                .email(email)
+                .password(password)
+                .gender(gender)
+                .phoneNumber(phoneNumber)
+                .address(address)
+                .role(role)
+                .build();
+
         userRepository.save(user);
 
         return new UserRegisterDto.UserRegisterResponseDto(user);
