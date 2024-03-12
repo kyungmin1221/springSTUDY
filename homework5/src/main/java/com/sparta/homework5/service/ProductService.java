@@ -27,12 +27,15 @@ public class ProductService {
     // 상품 등록(매니저만)
     @Transactional
     public ProductDto.ProductResponseDto createProduct(ProductDto.ProductRequestDto requestDto) {
+
+        UserEntity user = userService.findUserId(requestDto.getUserId());
         ProductEntity product = ProductEntity.builder()
                 .productName(requestDto.getProductName())
                 .price(requestDto.getPrice())
                 .amount(requestDto.getAmount())
                 .intro(requestDto.getIntro())
                 .category(requestDto.getCategory())
+                .user(user)
                 .build();
 
         productRepository.save(product);

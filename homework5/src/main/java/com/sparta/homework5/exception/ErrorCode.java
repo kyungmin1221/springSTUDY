@@ -37,6 +37,7 @@ public enum ErrorCode {
     // 409 CONFLICT: 중복된 리소스 (요청이 현재 서버 상태와 충돌될 때)
     DUPLICATE_EMAIL(CONFLICT, "이미 존재하는 이메일입니다."),
     DUPLICATE_NICKNAME(CONFLICT, "이미 존재하는 닉네임입니다."),
+    DUPLICATE_FOLDER(CONFLICT, "이미 존재하는 장바구니이름입니다."),
     DUPLICATE_LIKE(CONFLICT, "이미 좋아요를 누르셨습니다."),
 
     // 500 INTERNAL SERVER ERROR
