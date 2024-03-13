@@ -5,6 +5,7 @@ import com.sparta.homework5.dto.ProductDto;
 import com.sparta.homework5.repository.ProductRepository;
 import com.sparta.homework5.security.UserDetailsImpl;
 import com.sparta.homework5.service.ProductService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -23,6 +24,7 @@ public class ProductController {
     private final ProductService productService;
 
     // 상품 등록(매니저만)
+    @Operation(summary = "상품 등록" , description = "매니저 권한을 가진 회원이 상품을 등록합니다.")
     @PostMapping("/create")
     @Secured(Role.Authority.ADMIN)
     public ResponseEntity<ProductDto.ProductResponseDto> createProduct(@RequestBody ProductDto.ProductRequestDto requestDto) {
@@ -31,6 +33,7 @@ public class ProductController {
     }
 
     // 선택한 상품 조회
+    @Operation(summary = "선택한 상품의 정보 조화" , description = "productId 를 사용하여 상품의 정보를 조회합니다.")
     @GetMapping("/{productId}")
     public ResponseEntity<ProductDto.ProductResponseDto> getProduct(@PathVariable Long productId) {
         ProductDto.ProductResponseDto responseDto = productService.getProduct(productId);
@@ -38,6 +41,7 @@ public class ProductController {
     }
 
     // 등록된 상품 전체 목록 조회(상품명, 가격 중 기준을 선택할 수 있다.)
+    @Operation(summary = "상품 전체 조회" , description = "등록되어 있는 상품 전체를 조회합니다.")
     @GetMapping
     public Page<ProductDto.ProductResponseDto> getAllProduct(
             @RequestParam("page") int page,
