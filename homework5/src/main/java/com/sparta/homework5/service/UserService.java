@@ -6,8 +6,13 @@ import com.sparta.homework5.domain.UserEntity;
 import com.sparta.homework5.dto.UserRegisterDto;
 import com.sparta.homework5.exception.CustomException;
 import com.sparta.homework5.exception.ErrorCode;
+import com.sparta.homework5.jwt.JwtUtil;
 import com.sparta.homework5.repository.UserRepository;
+import com.sparta.homework5.security.UserDetailsImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +26,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     // 회원가입
     @Transactional
@@ -50,7 +56,15 @@ public class UserService {
 
         userRepository.save(user);
 
-        return new UserRegisterDto.UserRegisterResponseDto(user);
+        // 회원가입 후 자동 로그인 처리
+        Authentication authentication = new UsernamePasswordAuthenticationToken(role.getAuthority(), user.getEmail(), null);
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // JWT 토큰 생성
+        String token = jwtUtil.createToken(user.getEmail(), user.getRole());
+
+
+        return new UserRegisterDto.UserRegisterResponseDto(user , token);
     }
 
     public UserEntity findUserId(Long userId) {

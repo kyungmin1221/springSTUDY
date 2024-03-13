@@ -49,11 +49,13 @@ public class UserRegisterDto {
         private String email;
         private String gender;
         private Role role;
+        private String token;
 
-        public UserRegisterResponseDto(UserEntity user) {
+        public UserRegisterResponseDto(UserEntity user,String token) {
             this.email = user.getEmail();
             this.gender = user.getGender();
             this.role = user.getRole();
+            this.token = token;
         }
     }
 }
