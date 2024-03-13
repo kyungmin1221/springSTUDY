@@ -56,15 +56,8 @@ public class UserService {
 
         userRepository.save(user);
 
-        // 회원가입 후 자동 로그인 처리
-        Authentication authentication = new UsernamePasswordAuthenticationToken(role.getAuthority(), user.getEmail(), null);
-        SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // JWT 토큰 생성
-        String token = jwtUtil.createToken(user.getEmail(), user.getRole());
-
-
-        return new UserRegisterDto.UserRegisterResponseDto(user , token);
+        return new UserRegisterDto.UserRegisterResponseDto(user);
     }
 
     public UserEntity findUserId(Long userId) {
