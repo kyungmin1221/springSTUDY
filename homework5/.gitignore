@@ -39,6 +39,8 @@ out/
 # Created by https://www.toptal.com/developers/gitignore/api/macos
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos
 
+src/main/resources/application.properties
+
 ### macOS ###
 # General
 .DS_Store
