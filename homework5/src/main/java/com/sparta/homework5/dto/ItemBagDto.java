@@ -1,35 +1,28 @@
 package com.sparta.homework5.dto;
 
 
-import com.sparta.homework5.domain.ProductFolderEntity;
+import com.sparta.homework5.domain.ItemBag;
 import lombok.*;
 
 import java.util.List;
 
-public class ProductFolderDto {
+public class ItemBagDto {
 
     @Getter
     @Setter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class ProductFolderResponseDto {
+    public static class ItemBagResponseDto {
 
         private Long productId;
-
-        private List<ProductFolderItemDto> items;
 
         private int quantity;
 
         private int price;
 
-        public ProductFolderResponseDto(Long productId, int quantity, int price) {
-            this.productId = productId;
-            this.quantity = quantity;
-            this.price = price;
-        }
 
-        public ProductFolderResponseDto(ProductFolderEntity productFolder) {
+        public ItemBagResponseDto(ItemBag productFolder) {
             this.quantity = productFolder.getQuantity();
         }
     }
@@ -39,17 +32,14 @@ public class ProductFolderDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class ProductFolderItemDto {
+    public static class AddItemInFolderDto {
 
-        private Long productId;
-
+        // 장바구니에 추가할 상품 이름
         private String productName;
 
         // 상품의 양
         private int quantity;
 
-        // 상품의 가격
-        private int price;
     }
 
     @Getter
@@ -57,12 +47,14 @@ public class ProductFolderDto {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class ProductFolderItemPatchDto {
-        // 장바구니 상품의 ㅇㅏ이디
-        private Long productFolderId;
+    public static class ItemInFolderPatchDto {
+
         // 상품의 양
         private int quantity;
 
+        public ItemInFolderPatchDto(ItemBag itemBag) {
+            this.quantity = itemBag.getQuantity();
+        }
     }
 
     @Getter
@@ -72,7 +64,7 @@ public class ProductFolderDto {
     @Builder
     public static class CartItemDto {       // 상품 가격 조회할 때 필요
 
-        private List<ProductFolderItemDto> items;
+        private List<ItemBagResponseDto> items;
         private int totalPrice;
 
     }

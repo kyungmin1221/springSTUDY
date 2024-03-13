@@ -25,7 +25,7 @@ public class ProductEntity {
     private int price;
 
     @Column(nullable = false)
-    private int amount;
+    private int amount;     // 상품의 개수(양)
 
     @Column(nullable = false)
     private String intro;
@@ -38,8 +38,9 @@ public class ProductEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
-    @OneToMany(mappedBy = "product",fetch = FetchType.EAGER)
-    private List<ProductFolderEntity> productFolderList = new ArrayList<>();
+    // ,fetch = FetchType.EAGER 주석
+    @OneToMany(mappedBy = "product")
+    private List<ItemBag> productFolderList = new ArrayList<>();
 
 
     @Builder

@@ -3,20 +3,15 @@ package com.sparta.homework5.service;
 
 import com.sparta.homework5.domain.FolderEntity;
 import com.sparta.homework5.domain.ProductEntity;
-import com.sparta.homework5.domain.ProductFolderEntity;
+import com.sparta.homework5.domain.ItemBag;
 import com.sparta.homework5.domain.UserEntity;
 import com.sparta.homework5.dto.FolderDto;
-import com.sparta.homework5.dto.ProductDto;
-import com.sparta.homework5.dto.ProductFolderDto;
+import com.sparta.homework5.dto.ItemBagDto;
 import com.sparta.homework5.exception.CustomException;
 import com.sparta.homework5.exception.ErrorCode;
 import com.sparta.homework5.repository.FolderRepository;
-import com.sparta.homework5.repository.ProductFolderRepository;
-import com.sparta.homework5.repository.ProductRepository;
-import lombok.Builder;
+import com.sparta.homework5.repository.ItemBagRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,20 +27,22 @@ public class FolderService {
 
     private final FolderRepository folderRepository;
     private final ProductService productService;
-    private final ProductFolderRepository productFolderRepository;
+    private final ItemBagRepository productFolderRepository;
 
 
     // 장바구니 생성(회원만) - 추가된 상품은 구매할 만큼의 수량으로 선택 / 여러개 가능
     @Transactional
     public  List<FolderDto.FolderResponseDto> addFolders(List<String> folderNames, UserEntity user) {
-        // 장바구니 중복 방지
+        // 장바구니 중복 방지 - 이미 존재하는지 여부 확인
         List<FolderEntity> existFolderList = folderRepository.findAllByUserAndFolderNameIn(user, folderNames);
+
 
         List<FolderEntity> folderList = new ArrayList<>();
         List<FolderDto.FolderResponseDto> responseDtos = new ArrayList<>();
 
         for (String folderName : folderNames) {
-            // 이미 생성한 폴더가 아닌 경우만 폴더 생성
+            // 이미 생성한 폴더가 아닌 경우만 폴더 생성 //
+            // 중복된 경우가 없는 경우 로직
             if (!isExistFolderName(folderName, existFolderList)) {
                 FolderEntity folder = new FolderEntity(folderName, user);
                 folderList.add(folder);
@@ -61,12 +58,12 @@ public class FolderService {
 
     // 장바구니에 상품을 추가
     @Transactional
-    public ProductFolderDto.ProductFolderResponseDto addProductInFolder(Long folderId, ProductFolderDto.ProductFolderItemDto requestDto, UserEntity user) {
+    public ItemBagDto.ItemBagResponseDto addProductInFolder(Long folderId, Long productId, ItemBagDto.AddItemInFolderDto requestDto, UserEntity user) {
 
         FolderEntity folder = findFolderId(folderId);
-        ProductEntity product = productService.findProductId(requestDto.getProductId());
+        ProductEntity product = productService.findProductId(productId);
         int quantity = requestDto.getQuantity();
-        int price = requestDto.getPrice();
+        int price = product.getPrice();     // 설계실수 -> 상품과 장바구니 둘다 가격을 관리함
 
         // 사용자 권한 확인
         if (!product.getUser().getId().equals(user.getId()) || !folder.getUser().getId().equals(user.getId())) {
@@ -74,64 +71,88 @@ public class FolderService {
         }
 
         // 중복 상품 확인
-        Optional<ProductFolderEntity> overlapProduct = productFolderRepository.findByProductAndFolder(product, folder);
+        Optional<ItemBag> overlapProduct = productFolderRepository.findByProductAndFolder(product, folder);
         if (overlapProduct.isPresent()) {
             throw new IllegalArgumentException("이미 해당 폴더에 상품이 존재합니다.");
         }
 
         // 상품 폴더 엔티티 생성 및 저장
-        ProductFolderEntity productFolder = ProductFolderEntity.builder()
+        ItemBag itemBag = ItemBag.builder()
                 .product(product)
                 .folder(folder)
                 .quantity(quantity)
                 .price(price)
                 .build();
 
-        productFolderRepository.save(productFolder);
+        productFolderRepository.save(itemBag);
 
         // 응답 DTO 생성 및 반환
-        return new ProductFolderDto.ProductFolderResponseDto(product.getId(), quantity , price);
+        return new ItemBagDto.ItemBagResponseDto(product.getId(), quantity , price);
     }
 
     // 장바구니 조회(회원만) - 장바구니에 담긴 상품들의 총 결제 금액확인 가능
-    public ProductFolderDto.CartItemDto getFolder(Long folderId, UserEntity user) {
+    public ItemBagDto.CartItemDto getFolder(Long folderId, UserEntity user) {
         FolderEntity folder = findFolderId(folderId);
+
         if(!folder.getUser().getId().equals(user.getId())) {
             throw new IllegalArgumentException("해당 장바구니에 접근 권한이 없습니다. 다시 로그인해주세요.");
         }
 
         // 장바구니에서 상품 다 추출
-        List<ProductFolderEntity> cartItems = productFolderRepository.findAllByFolderId(folderId);
+        List<ItemBag> cartItems = productFolderRepository.findAllByFolderId(folderId);
 
-        List<ProductFolderDto.ProductFolderItemDto> itemDtos = cartItems.stream().map(item -> new ProductFolderDto.ProductFolderItemDto(
-                item.getProduct().getId(),      // prio
-                item.getProduct().getProductName(),
-                item.getQuantity(),
-                item.getProduct().getPrice()
-        )).collect(Collectors.toList());
+//        // map 연산은 각 item을 새로운 형태로 변환하는 역할을 함
+//        List<ItemBagDto.AddItemInFolderDto> itemDtos = cartItems.stream().map(
+//                // item : 스트림의 각 요소 -> ItemBagDto.AddItemInFolderDto 로 반환
+//                item ->
+//                new ItemBagDto.AddItemInFolderDto(
+//                // 값 세팅
+//                item.getProduct().getProductName(),
+//                item.getQuantity(),
+//                item.getProduct().getPrice()
+//
+//        )).collect(Collectors.toList());    // 생성된 모든 스트림 요소를 리스트로 수집 -> itemDtos 에 최종 반환
 
-        int totalPrice = itemDtos.stream()
-                .mapToInt(item -> item.getPrice() * item.getQuantity())
+        // map 연산은 각 item을 새로운 형태로 변환하는 역할을 함
+        // item : 스트림의 각 요소 -> ItemBagDto.AddItemInFolderDto 로 반환
+        List<ItemBagDto.ItemBagResponseDto> itemDtos = cartItems.stream().map(item -> {
+            int latestPrice = item.getProduct().getPrice(); // 상품의 최신 가격 정보를 직접 가져옴
+            return new ItemBagDto.ItemBagResponseDto(
+                    item.getProduct().getId(),
+                    item.getQuantity(),
+                    latestPrice
+            );
+        }).collect(Collectors.toList());
+
+        // 총 결제금액 계산 (mapToInt : 각 객체를 정수형 결과로 변환하여 새로운 정수형 스트림을 생성
+        int totalPrice = itemDtos.stream().mapToInt(
+                item -> item.getPrice() * item.getQuantity())
                 .sum();
 
-        return new ProductFolderDto.CartItemDto(itemDtos, totalPrice);
+        return new ItemBagDto.CartItemDto(itemDtos, totalPrice);
     }
 
 
-    // 장바구니 수정(회원만) - 선택한 상품의 수량을 수정할 수 있음
+    // 장바구니 수정(회원만) - 선택한 상품의 수량을 수정할 수 있음 / 무슨 장바구니 ? 무슨 상품 ?
     @Transactional
-    public ProductFolderDto.ProductFolderResponseDto updateFolder(ProductFolderDto.ProductFolderItemPatchDto patchDto, UserEntity user) {
-        ProductFolderEntity productFolder = productFolderRepository.findById(patchDto.getProductFolderId())
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 장바구니 상품이 존재하지 않습니다."));
+    public ItemBagDto.ItemInFolderPatchDto updateFolder(Long folderId, Long productId, ItemBagDto.ItemInFolderPatchDto patchDto, UserEntity user) {
+        FolderEntity folder = findFolderId(folderId);
+        ProductEntity product  = productService.findProductId(productId);
 
-        if(!productFolder.getFolder().getId().equals(patchDto.getProductFolderId())) {
-            throw new IllegalArgumentException("장바구니의 수정 권한이 없습니다. 다시 로그인해주세요.");
+        // 사용자 권한 확인
+        if (!folder.getUser().getId().equals(user.getId())) {
+            throw new IllegalArgumentException("회원님의 장바구니가 아닙니다");
         }
 
-        productFolder.setQuantity(patchDto.getQuantity());
-        productFolderRepository.save(productFolder);
+        ItemBag itemBag = ItemBag.builder()
+                .product(product)
+                .folder(folder)
+                .quantity(patchDto.getQuantity())
+                .build();
 
-        return new ProductFolderDto.ProductFolderResponseDto(productFolder);
+        productFolderRepository.save(itemBag);
+
+        return new ItemBagDto.ItemInFolderPatchDto(itemBag);
     }
 
     // 장바구니 삭제(회원만)
@@ -146,6 +167,7 @@ public class FolderService {
     private Boolean isExistFolderName(String folderName, List<FolderEntity> existFolderList) {
         // 기존 폴더 리스트에서 folder name 이 있는지?
         for (FolderEntity existFolder : existFolderList) {
+            // 원래 있는 장바구니 라면 true 반환
             if (folderName.equals(existFolder.getFolderName())) {
                 return true;
             }

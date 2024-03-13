@@ -2,7 +2,7 @@ package com.sparta.homework5.controller;
 
 
 import com.sparta.homework5.dto.FolderDto;
-import com.sparta.homework5.dto.ProductFolderDto;
+import com.sparta.homework5.dto.ItemBagDto;
 import com.sparta.homework5.security.UserDetailsImpl;
 import com.sparta.homework5.service.FolderService;
 import lombok.RequiredArgsConstructor;
@@ -29,24 +29,25 @@ public class FolderController {
     }
 
     // 장바구니에 상품 추가
-    @PostMapping("/{folderId}")
-    public ResponseEntity<ProductFolderDto.ProductFolderResponseDto> addProductInFolder(@PathVariable Long folderId, @RequestBody ProductFolderDto.ProductFolderItemDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        ProductFolderDto.ProductFolderResponseDto responseDto = folderService.addProductInFolder(folderId, requestDto,userDetails.getUser());
+    @PostMapping("/{folderId}/product/{productId}")
+    public ResponseEntity<ItemBagDto.ItemBagResponseDto> addProductInFolder(@PathVariable Long folderId, @PathVariable Long productId,@RequestBody ItemBagDto.AddItemInFolderDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        ItemBagDto.ItemBagResponseDto responseDto = folderService.addProductInFolder(folderId, productId,requestDto,userDetails.getUser());
         return ResponseEntity.ok(responseDto);
 
     }
 
     // 장바구니 조회
     @GetMapping("/{folderId}")
-    public ResponseEntity<ProductFolderDto.CartItemDto> getFolder(@PathVariable Long folderId,  @AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<ItemBagDto.CartItemDto> getFolder(@PathVariable Long folderId, @AuthenticationPrincipal UserDetailsImpl userDetails) {
         return ResponseEntity.ok().body(folderService.getFolder(folderId, userDetails.getUser()));
     }
 
-    // 장바구니 수정
-    @PatchMapping
-    public ResponseEntity<ProductFolderDto.ProductFolderResponseDto> updateFolder(@RequestBody ProductFolderDto.ProductFolderItemPatchDto patchDto,
-                                                                                  @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        return ResponseEntity.ok().body(folderService.updateFolder(patchDto,userDetails.getUser()));
+    // 장바구니 수정(장바구니에서 선택한 상품의 수량을 수정)
+    @PatchMapping("/{folderId}/product/{productId}")
+    public ResponseEntity<ItemBagDto.ItemInFolderPatchDto> updateFolder(@PathVariable Long folderId, @PathVariable Long productId,
+                                                                      @RequestBody ItemBagDto.ItemInFolderPatchDto patchDto,
+                                                                      @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        return ResponseEntity.ok().body(folderService.updateFolder(folderId,productId,patchDto,userDetails.getUser()));
     }
 
     // 장바구니 삭제
