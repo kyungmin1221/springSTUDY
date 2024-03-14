@@ -2,6 +2,7 @@ package com.sparta.homework5.dto;
 
 
 import com.sparta.homework5.domain.ItemBag;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -35,9 +36,11 @@ public class ItemBagDto {
     public static class AddItemInFolderDto {
 
         // 장바구니에 추가할 상품 이름
+        @NotNull
         private String productName;
 
         // 상품의 양
+        @NotNull
         private int quantity;
 
     }
@@ -50,6 +53,7 @@ public class ItemBagDto {
     public static class ItemInFolderPatchDto {
 
         // 상품의 양
+        @NotNull
         private int quantity;
 
         public ItemInFolderPatchDto(ItemBag itemBag) {

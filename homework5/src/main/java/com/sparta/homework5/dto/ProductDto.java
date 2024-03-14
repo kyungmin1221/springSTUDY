@@ -3,6 +3,8 @@ package com.sparta.homework5.dto;
 import com.sparta.homework5.constant.Category;
 import com.sparta.homework5.domain.ProductEntity;
 import com.sparta.homework5.domain.ItemBag;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,18 +20,27 @@ public class ProductDto {
     @Builder
     public static class ProductRequestDto {
 
+        @NotNull
         private String productName;
 
+        @NotNull
+        @Positive
         private int price;
 
+        @NotNull
+        @Positive
         private int amount;
 
+        @NotNull
         private String intro;
 
+        @NotNull
         private Category category;
 
+        @NotNull
         private Long userId;
 
+        @NotNull
         private MultipartFile image;
 
     }

@@ -101,18 +101,6 @@ public class FolderService {
         // 장바구니에서 상품 다 추출
         List<ItemBag> cartItems = productFolderRepository.findAllByFolderId(folderId);
 
-//        // map 연산은 각 item을 새로운 형태로 변환하는 역할을 함
-//        List<ItemBagDto.AddItemInFolderDto> itemDtos = cartItems.stream().map(
-//                // item : 스트림의 각 요소 -> ItemBagDto.AddItemInFolderDto 로 반환
-//                item ->
-//                new ItemBagDto.AddItemInFolderDto(
-//                // 값 세팅
-//                item.getProduct().getProductName(),
-//                item.getQuantity(),
-//                item.getProduct().getPrice()
-//
-//        )).collect(Collectors.toList());    // 생성된 모든 스트림 요소를 리스트로 수집 -> itemDtos 에 최종 반환
-
         // map 연산은 각 item을 새로운 형태로 변환하는 역할을 함
         // item : 스트림의 각 요소 -> ItemBagDto.AddItemInFolderDto 로 반환
         List<ItemBagDto.ItemBagResponseDto> itemDtos = cartItems.stream().map(item -> {

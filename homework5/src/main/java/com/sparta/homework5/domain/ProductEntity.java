@@ -41,17 +41,15 @@ public class ProductEntity {
 
     @Column
     private String imageUrl;
-//    @OneToOne
-//    @JoinColumn(name = "image_id")
-//    private ImageEntity image;
 
-    // ,fetch = FetchType.EAGER 주석
     @OneToMany(mappedBy = "product")
     private List<ItemBag> productFolderList = new ArrayList<>();
 
 
     @Builder
-    public ProductEntity(String productName, int price, int amount, String intro, String imageUrl, Category category,UserEntity user) {
+    public ProductEntity(String productName, int price, int amount, String intro,
+                         String imageUrl, Category category,UserEntity user) {
+
         this.productName = productName;
         this.price = price;
         this.amount = amount;
