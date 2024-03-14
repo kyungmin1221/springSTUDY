@@ -4,6 +4,7 @@ import com.sparta.homework5.constant.Category;
 import com.sparta.homework5.domain.ProductEntity;
 import com.sparta.homework5.domain.ItemBag;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,8 @@ public class ProductDto {
 
         private Long userId;
 
+        private MultipartFile image;
+
     }
 
     @Getter
@@ -48,6 +51,8 @@ public class ProductDto {
 
         private Category category;
 
+        private String imageUrl;
+
 
         public ProductResponseDto(ProductEntity product) {
             this.productName = product.getProductName();
@@ -55,6 +60,7 @@ public class ProductDto {
             this.amount = product.getAmount();
             this.intro = product.getIntro();
             this.category = product.getCategory();
+            this.imageUrl  = product.getImageUrl();
 
         }
     }

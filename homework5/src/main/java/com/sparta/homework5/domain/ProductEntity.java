@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,18 +39,25 @@ public class ProductEntity {
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    @Column
+    private String imageUrl;
+//    @OneToOne
+//    @JoinColumn(name = "image_id")
+//    private ImageEntity image;
+
     // ,fetch = FetchType.EAGER 주석
     @OneToMany(mappedBy = "product")
     private List<ItemBag> productFolderList = new ArrayList<>();
 
 
     @Builder
-    public ProductEntity(String productName, int price, int amount, String intro, Category category,UserEntity user) {
+    public ProductEntity(String productName, int price, int amount, String intro, String imageUrl, Category category,UserEntity user) {
         this.productName = productName;
         this.price = price;
         this.amount = amount;
         this.intro = intro;
         this.category = category;
+        this.imageUrl = imageUrl;
         this.user = user;
     }
 

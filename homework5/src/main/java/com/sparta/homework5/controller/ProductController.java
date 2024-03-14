@@ -14,6 +14,7 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class ProductController {
     @Operation(summary = "상품 등록" , description = "매니저 권한을 가진 회원이 상품을 등록합니다.")
     @PostMapping("/create")
     @Secured(Role.Authority.ADMIN)
-    public ResponseEntity<ProductDto.ProductResponseDto> createProduct(@RequestBody ProductDto.ProductRequestDto requestDto) {
+    public ResponseEntity<ProductDto.ProductResponseDto> createProduct(@ModelAttribute @Valid ProductDto.ProductRequestDto requestDto) throws IOException {
         ProductDto.ProductResponseDto responseDto = productService.createProduct(requestDto);
         return ResponseEntity.ok(responseDto);
     }

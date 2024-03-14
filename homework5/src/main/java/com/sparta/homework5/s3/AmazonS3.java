@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-public class AmazonS3Config {
+public class AmazonS3 {
 
     @Value("${cloud.aws.credentials.access-key}")
     private String accessKey;
