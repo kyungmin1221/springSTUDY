@@ -63,7 +63,7 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll() // resources 접근 허용 설정
                         .requestMatchers("/api/users/**").permitAll()
-                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI 접근 허용
+                        .requestMatchers("/email-verification","/swagger-ui/**", "/v3/api-docs/**").permitAll() // Swagger UI 접근 허용
                         .anyRequest().authenticated()
         );
 
